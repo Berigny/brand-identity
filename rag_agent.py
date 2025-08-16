@@ -34,7 +34,9 @@ def run_flow_simulation(start_node="system_1-N0"):
         'tribal_grid-12': '12 Tribes (VE 12)'
     }
     for node, label in nodes.items():
-        G.add_node(node, label=label, activations=0)0', 'blueprint-Centroid'), ('system_2-N0', 'blueprint-Centroid'),
+        G.add_node(node, label=label, activations=0)
+    G.add_edges_from([
+        ('system_1-N0', 'blueprint-Centroid'), ('system_2-N0', 'blueprint-Centroid'),
         ('blueprint-Centroid', 'system_1-N1'), ('blueprint-Centroid', 'system_2-N1'),
         ('system_1-N1', 'system_1-N2'), ('system_2-N1', 'system_2-N2'),
         ('system_1-N2', 'system_1-N3'), ('system_2-N2', 'system_2-N3'),
@@ -94,7 +96,7 @@ def write_to_db(content: str) -> str:
                 query = """
                 MERGE (t:BrandToken {key: $key})
                 SET t += $props
-                WITH tED_BY]->(p)
+                WITH t
                 FOREACH (r_id IN $resonance_outputs |
                     MERGE (r:Resonance {id: r_id})
                     MERGE (t)-[:RESONATES_WITH]->(r))
@@ -177,3 +179,4 @@ if __name__ == "__main__":
     prompt = sys.argv[1] if len(sys.argv) > 1 else "Add a new tertiary emotional token with high prime, test for drift, and refine for consilience."
     response = executor.run(prompt)
     print(response)
+print(graph.query("MATCH (n:BrandToken) RETURN n.key LIMIT 5"))
