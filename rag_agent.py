@@ -2,7 +2,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_neo4j import Neo4jGraph
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain.tools import StructuredTool
-from langchain_openai import ChatOpenAI  # OpenRouter-compatible Chat Completions
+from langchain_openai import AzureChatOpenAI
 from dotenv import load_dotenv
 from app.utils.flow_simulator import run_flow_simulation  # BAU simulator
 from app.design_system import (
@@ -130,12 +130,14 @@ drift_tool = StructuredTool.from_function(
 )
 
 # Tool 4: Refine Rules
-# Configure LLM via OpenRouter (DeepSeek) by default
-# Env vars: OPENROUTER_API_KEY, OPENROUTER_MODEL (default: deepseek/deepseek-chat), OPENROUTER_BASE_URL
-llm = ChatOpenAI(
-    openai_api_key=os.getenv("OPENROUTER_API_KEY"),
-    base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
-    model=os.getenv("OPENROUTER_MODEL", "deepseek/deepseek-chat"),
+# Configure LLM to use Azure OpenAI by default
+# Env vars: AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_DEPLOYMENT_NAME, OPENAI_API_VERSION
+llm = AzureChatOpenAI(
+    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+    openai_api_version=os.getenv("OPENAI_API_VERSION"),
+    deployment_name=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
+    # When no api_key is provided, the library will automatically
+    # use credentials from the Azure CLI or other Azure identity sources.
 )
 
 prompt = PromptTemplate(
@@ -313,7 +315,8 @@ agent = create_react_agent(
     tools=tools,
     prompt=PromptTemplate.from_template(
 """You are a RAG agent building a brand identity. Use tools to layer external rules, write to DB, test for drift, and refine for consilience with VE phases (2, 12, 24, 42, 480) and core nodes.
-You can also fetch content from web pages to enrich the brand information.\nYou can also load content from local directories using the LoadLocalDirectory tool to enrich the brand information.
+You can also fetch content from web pages to enrich the brand information.
+You can also load content from local directories using the LoadLocalDirectory tool to enrich the brand information.
 
 You have access to the following tools:
 
