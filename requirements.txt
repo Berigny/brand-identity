@@ -1,0 +1,23 @@
+# Core agent and tools
+langchain
+langchain-openai
+langchain-neo4j
+langchain-community
+neo4j
+python-dotenv
+
+# Numerical + data
+numpy
+pandas
+networkx
+
+# Visualization
+matplotlib
+streamlit
+
+# Computer vision
+opencv-python
+
+# Optional extras mentioned in notes (not strictly required by code)
+scikit-image
+scikit-learn
