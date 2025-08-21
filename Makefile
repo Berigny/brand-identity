@@ -5,10 +5,10 @@ PYTHON3 ?= python3
 PYTHON := $(VENV_DIR)/bin/python
 PIP := $(VENV_DIR)/bin/pip
 
-# Load environment variables from .env.local if present
+# --- Load environment variables from .env.local if present ---
 ifneq (,$(wildcard .env.local))
-	include .env.local
-	export
+  include .env.local
+  export
 endif
 
 PROMPT ?= Add a new tertiary emotional token with high prime, test for drift, and refine for consilience.
