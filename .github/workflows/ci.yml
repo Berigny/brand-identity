@@ -21,7 +21,6 @@ jobs:
       OPENROUTER_API_KEY:     ${{ secrets.OPENROUTER_API_KEY }}
       OPENROUTER_BASE_URL:    ${{ secrets.OPENROUTER_BASE_URL }}
       OPENROUTER_MODEL:       ${{ secrets.OPENROUTER_MODEL }}
-      RAG_ENDPOINT:           ${{ secrets.RAG_ENDPOINT }}   # add if you need it
 
     steps:
       - uses: actions/checkout@v4
