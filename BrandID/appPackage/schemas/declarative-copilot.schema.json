@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Declarative Copilot Schema (local)",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "name": { "type": "string" },
+    "instructions": { "type": "string" },
+    "conversationStartBehavior": {
+      "type": "object",
+      "properties": {
+        "assistantPrep": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "plugins": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "source": {
+            "type": "object",
+            "properties": {
+              "openApiSpecFile": { "type": "string" }
+            },
+            "required": ["openApiSpecFile"],
+            "additionalProperties": true
+          },
+          "authentication": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string" },
+              "name": { "type": "string" },
+              "in": { "type": "string" },
+              "value": { "type": "string" }
+            },
+            "additionalProperties": true
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "operationId": { "type": "string" },
+                "description": { "type": "string" }
+              },
+              "required": ["id", "operationId"],
+              "additionalProperties": true
+            }
+          }
+        },
+        "required": ["name", "source"],
+        "additionalProperties": true
+      }
+    }
+  },
+  "required": ["name", "plugins"],
+  "additionalProperties": true
+}

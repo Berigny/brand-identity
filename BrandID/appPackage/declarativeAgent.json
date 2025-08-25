@@ -1,0 +1,35 @@
+{
+  "$schema": "https://aka.ms/json-schemas/copilot/declarative-copilot.schema.json",
+  "name": "Brand Identity Agent",
+  "instructions": "You are the Brand Identity Agent. Use the brandApi plugin to search the brand corpus and provide grounded answers with citations. Always respond in a clear, concise style that aligns with brand guidelines.",
+  "conversationStartBehavior": {
+    "assistantPrep": "Greet briefly, then suggest: 'You can ask me to search brand rules (/search) or generate an on-brand answer (/answer).' "
+  },
+  "plugins": [
+    {
+      "name": "brandApi",
+      "description": "Brand identity RAG endpoints (search and answer).",
+      "source": {
+        "openApiSpecFile": "appPackage/apiSpecificationFile/openapi.yaml"
+      },
+      "authentication": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "value": "Bearer ${{BRANDID}}"
+      },
+      "actions": [
+        {
+          "id": "ragSearch",
+          "operationId": "ragSearch",
+          "description": "Search the brand corpus for relevant passages."
+        },
+        {
+          "id": "brandAnswer",
+          "operationId": "brandAnswer",
+          "description": "Compose an on-brand answer with citations."
+        }
+      ]
+    }
+  ]
+}

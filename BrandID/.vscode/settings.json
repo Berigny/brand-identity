@@ -1,0 +1,18 @@
+{
+    "debug.onTaskErrors": "abort",
+    "json.schemaDownload.enable": false,
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "/aad.*.json"
+            ],
+            "schema": {}
+        },
+        {
+            "fileMatch": [
+                "**/appPackage/declarativeAgent.json"
+            ],
+            "url": "../appPackage/schemas/declarative-copilot.schema.json"
+        }
+    ]
+}

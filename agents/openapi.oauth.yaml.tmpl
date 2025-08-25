@@ -1,0 +1,37 @@
+openapi: 3.0.1
+info:
+  title: BrandID API (AAD-protected)
+  version: "0.1.0"
+servers:
+  - url: {{NGROK_URL}}
+paths:
+  /rules:
+    get:
+      operationId: getRules
+      summary: Retrieve brand rules filtered by query string
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: string
+          description: Optional filter query
+      responses:
+        "200":
+          description: OK
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://login.microsoftonline.com/{{TENANT_ID}}/oauth2/v2.0/token
+          scopes:
+            {{APP_ID_URI}}: Access BrandID API
+security:
+  - oauth2:
+      - {{APP_ID_URI}}
+x-runtime:
+  authentication:
+    type: OAuthPluginVault
+    reference_id: "{{OAUTH_REGISTRATION_ID}}"
+

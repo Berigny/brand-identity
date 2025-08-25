@@ -1,0 +1,26 @@
+openapi: 3.0.1
+info:
+  title: BrandID API
+  version: "0.1.0"
+servers:
+  - url: https://f6155ab4bcef.ngrok-free.app
+paths:
+  /rules:
+    get:
+      operationId: getRules
+      summary: Retrieve brand rules filtered by query string
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: string
+          description: Optional filter query
+      responses:
+        "200":
+          description: OK
+components: {}
+x-runtime:
+  authentication:
+    type: ApiKeyPluginVault
+    reference_id: "915995b0-497d-4c62-8cb4-5d3ac6355f91"
+

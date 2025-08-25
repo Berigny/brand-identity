@@ -178,8 +178,13 @@ with tabs[6]:
             rows = graph.query("MATCH (r:SimRun) RETURN r.ts AS ts, r.coherence_score AS coherence, r.confidence AS confidence, r.steps AS steps ORDER BY r.ts ASC")
             if rows:
                 import pandas as pd
+                import numpy as np
                 df = pd.DataFrame(rows)
                 df["ts"] = pd.to_datetime(df["ts"], errors="coerce")
+                numeric_cols = ["coherence", "confidence", "steps"]
+                for col in numeric_cols:
+                    df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+                df = df.replace([np.inf, -np.inf], 0)
                 df = df.dropna(subset=["ts"]).set_index("ts")
                 st.line_chart(df[["coherence", "confidence"]])
                 st.bar_chart(df[["steps"]])

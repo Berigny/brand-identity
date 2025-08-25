@@ -1,0 +1,74 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/copilot/plugin/v2.1/schema.json",
+    "schema_version": "v2.1",
+    "name_for_human": "Brand Identity API",
+    "description_for_human": "Description for Brand Identity API",
+    "description_for_model": "Description for Brand Identity API",
+    "contact_email": "publisher-email@example.com",
+    "namespace": "brandid",
+    "capabilities": {
+        "conversation_starters": [
+            {
+                "text": "RAG search across brand corpus"
+            },
+            {
+                "text": "Compose an on-brand answer grounded in retrieved c"
+            }
+        ]
+    },
+    "functions": [
+        {
+            "name": "answer_post",
+            "description": "Compose an on-brand answer grounded in retrieved context",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$",
+                    "static_template": {
+                        "file": "./adaptiveCards/answer_post.json"
+                    }
+                }
+            }
+        },
+        {
+            "name": "search_post",
+            "description": "RAG search across brand corpus",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$",
+                    "static_template": {
+                        "file": "./adaptiveCards/search_post.json"
+                    }
+                }
+            }
+        }
+    ],
+    "runtimes": [
+        {
+            "type": "OpenApi",
+            "auth": {
+                "type": "ApiKeyPluginVault",
+                "reference_id": "${{BEARERAUTH_REGISTRATION_ID}}"
+            },
+            "spec": {
+                "url": "apiSpecificationFile/openapi.yaml"
+            },
+            "run_for_functions": [
+                "search_post",
+                "answer_post"
+            ]
+        },
+        {
+            "type": "OpenApi",
+            "auth": {
+                "type": "None"
+            },
+            "spec": {
+                "url": "https://<your-dev-tunnel-id>.dev.tunnels.ms/openapi.yaml"
+            },
+            "run_for_functions": [
+                "search_post",
+                "answer_post"
+            ]
+        }
+    ]
+}

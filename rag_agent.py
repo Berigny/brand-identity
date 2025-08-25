@@ -2,7 +2,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_neo4j import Neo4jGraph
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain.tools import StructuredTool
-from langchain_openai import AzureChatOpenAI
+from langchain_openai import AzureChatOpenAI, ChatOpenAI
 from dotenv import load_dotenv
 from app.utils.flow_simulator import run_flow_simulation  # BAU simulator
 from app.design_system import (
@@ -16,11 +16,15 @@ import os
 import json
 from langchain_community.document_loaders import WebBaseLoader
 
+# Load environment from .env and .env.local (dev)
 load_dotenv()
+load_dotenv(".env.local")
 
 # Neo4j connection
+# Provide a sensible default for local single-instance use
+_neo4j_uri = os.getenv("NEO4J_URI") or "bolt://localhost:7687"
 graph = Neo4jGraph(
-    url=os.getenv("NEO4J_URI"),
+    url=_neo4j_uri,
     username=os.getenv("NEO4J_USER"),
     password=os.getenv("NEO4J_PASSWORD"),
     database=os.getenv("NEO4J_DATABASE", "neo4j"),
@@ -130,15 +134,48 @@ drift_tool = StructuredTool.from_function(
 )
 
 # Tool 4: Refine Rules
-# Configure LLM to use Azure OpenAI by default
-# Env vars: AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_DEPLOYMENT_NAME, OPENAI_API_VERSION
-llm = AzureChatOpenAI(
-    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
-    openai_api_version=os.getenv("OPENAI_API_VERSION"),
-    deployment_name=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
-    # When no api_key is provided, the library will automatically
-    # use credentials from the Azure CLI or other Azure identity sources.
-)
+# LLM selection with fallbacks: Azure -> OpenRouter -> error
+def _build_llm():
+    # Prefer Azure if configured
+    if os.getenv("AZURE_OPENAI_ENDPOINT") and os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"):
+        return AzureChatOpenAI(
+            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+            openai_api_version=os.getenv("OPENAI_API_VERSION"),
+            deployment_name=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
+        )
+
+    # Fallback to OpenRouter (OpenAI-compatible API)
+    if os.getenv("OPENROUTER_API_KEY"):
+        # Optional headers recommended by OpenRouter docs
+        default_headers = {}
+        if os.getenv("OPENROUTER_SITE_URL"):
+            default_headers["HTTP-Referer"] = os.getenv("OPENROUTER_SITE_URL")
+        if os.getenv("OPENROUTER_APP_NAME"):
+            default_headers["X-Title"] = os.getenv("OPENROUTER_APP_NAME")
+
+        return ChatOpenAI(
+            api_key=os.getenv("OPENROUTER_API_KEY"),
+            base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+            model=os.getenv("OPENROUTER_MODEL", "openrouter/auto"),
+            default_headers=default_headers or None,
+        )
+
+    # As another option, allow xAI Grok via OpenAI-compatible API if provided
+    if os.getenv("GROK_API_KEY"):
+        try:
+            return ChatOpenAI(
+                api_key=os.getenv("GROK_API_KEY"),
+                base_url=os.getenv("GROK_BASE_URL", "https://api.x.ai/v1"),
+                model=os.getenv("GROK_MODEL", "grok-2-latest"),
+            )
+        except Exception:
+            pass
+
+    raise RuntimeError(
+        "No LLM credentials found. Set Azure (AZURE_OPENAI_*) or OpenRouter (OPENROUTER_API_KEY)."
+    )
+
+llm = _build_llm()
 
 prompt = PromptTemplate(
     input_variables=["test_results", "proposed_content"],
@@ -229,7 +266,7 @@ def generate_tangible_outputs(content: str) -> str:
       <body>
         <h1>Welcome to Your Emotional Journey</h1>
         <p>Explore possibilities with our brand vibe, inspired by novelty and coherence.</p>
-        <button class="cta">Get Started</button>
+        <button class=\"cta\">Get Started</button>
       </body>
     </html>
     """.strip()
@@ -343,11 +380,15 @@ executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_
 
 # Simple module-level helper for callers that expect a `run(prompt)` API
 def run(prompt: str, url: str = None, local_path: str = None) -> str:
-    if url:
-        prompt = f"{prompt}\n\nReference URL: {url}"
-    if local_path:
-        prompt = f"{prompt}\n\nLocal directory path: {local_path}"
-    return executor.invoke({"input": prompt})["output"]
+    try:
+        if url:
+            prompt = f"{prompt}\n\nReference URL: {url}"
+        if local_path:
+            prompt = f"{prompt}\n\nLocal directory path: {local_path}"
+        return executor.invoke({"input": prompt})["output"]
+    except Exception as e:
+        import traceback
+        return f"An unexpected error occurred: {str(e)}\n\nTraceback:\n{traceback.format_exc()}"
 
 
 # Run the agent with a prompt

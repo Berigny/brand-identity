@@ -1,0 +1,22 @@
+openapi: 3.0.1
+info:
+  title: BrandID API (no-auth, smoke test)
+  version: "0.1.0"
+servers:
+  - url: {{NGROK_URL}}
+paths:
+  /rules:
+    get:
+      operationId: getRules
+      summary: Retrieve brand rules filtered by query string (no auth)
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: string
+          description: Optional filter query
+      responses:
+        "200":
+          description: OK
+components: {}
+

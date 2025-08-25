@@ -6,6 +6,10 @@ langchain-community
 neo4j
 python-dotenv
 
+# API server
+fastapi
+uvicorn
+
 # Numerical + data
 numpy
 pandas
