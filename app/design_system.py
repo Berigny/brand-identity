@@ -37,16 +37,27 @@ def upsert_design_rule(
     description: str,
     rule_type: str,
     params: Optional[Dict[str, Any]] = None,
+    lastAmendedAt: Optional[str] = None,
+    lastEvidenceScore: Optional[float] = None,
 ) -> Dict[str, Any]:
     result = db.execute_query(
         """
         MERGE (r:DesignRule {id: $id})
         SET r.description = $desc,
             r.type = $type,
-            r.params = $params
+            r.params = $params,
+            r.lastAmendedAt = datetime($lastAmendedAt),
+            r.lastEvidenceScore = $lastEvidenceScore
         RETURN r AS rule
         """,
-        {"id": rule_id, "desc": description, "type": rule_type, "params": params or {}},
+        {
+            "id": rule_id,
+            "desc": description,
+            "type": rule_type,
+            "params": params or {},
+            "lastAmendedAt": lastAmendedAt,
+            "lastEvidenceScore": lastEvidenceScore,
+        },
     )
     return result[0] if result else {}
 

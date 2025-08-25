@@ -1,0 +1,458 @@
+{
+  "brand_identity_kernel": {
+    "blueprint": "\u221e",
+    "core_nodes": {
+      "system_1": {
+        "N0": "Possibility / Novelty",
+        "N1": "Light / Shadow",
+        "N2": "Separation / Structure",
+        "N3": "Emergence / Life"
+      },
+      "system_2": {
+        "N0": "Time / Sequence",
+        "N1": "Motion / Vitality",
+        "N2": "Agency / Image",
+        "N3": "Coherence / Rest"
+      }
+    },
+    "modal_domains": {
+      "visual": {
+        "description": "Colours, UI, layout, iconography, product visuals",
+        "inputs": {
+          "perceive_surface": 6,
+          "detect_division": 10,
+          "recognise_form": 15,
+          "observe_change": 14
+        },
+        "outputs": {
+          "express_theme": 33,
+          "signal_status": 35,
+          "amplify_brand_colours": 26,
+          "project_coherence": 51
+        }
+      },
+      "auditory": {
+        "description": "Brand voice, tone, notifications, music cues",
+        "inputs": {
+          "listen_voice": 21,
+          "detect_rhythm": 22,
+          "recognise_alerts": 34,
+          "tune_variation": 38
+        },
+        "outputs": {
+          "speak_consistently": 39,
+          "harmonise_message": 46,
+          "cue_response": 55,
+          "echo_emotion": 65
+        }
+      },
+      "linguistic": {
+        "description": "Naming, microcopy, content tone, chatbot messaging",
+        "inputs": {
+          "read_labels": 19,
+          "interpret_copy": 23,
+          "track_context": 29,
+          "detect_incoherence": 31
+        },
+        "outputs": {
+          "write_in_voice": 37,
+          "align_tone": 41,
+          "adapt_register": 43,
+          "update_style": 47
+        }
+      },
+      "kinaesthetic": {
+        "description": "Motion, interaction patterns, product gestures",
+        "inputs": {
+          "sense_movement": 17,
+          "detect_friction": 27,
+          "trace_gesture": 30,
+          "feel_flow": 32
+        },
+        "outputs": {
+          "move_fluidly": 36,
+          "reduce_resistance": 40,
+          "suggest_action": 42,
+          "reinforce_pattern": 49
+        }
+      },
+      "emotional": {
+        "description": "Empathy, relational cues, brand warmth",
+        "inputs": {
+          "sense_valence": 13,
+          "detect_mismatch": 20,
+          "register_reaction": 24,
+          "track_affect": 28
+        },
+        "outputs": {
+          "respond_gently": 45,
+          "radiate_assurance": 50,
+          "mirror_emotion": 52,
+          "generate_trust": 57
+        }
+      },
+      "symbolic": {
+        "description": "Brand myth, ritual, archetype, logo memory",
+        "inputs": {
+          "read_icon": 11,
+          "recall_story": 16,
+          "interpret_symbol": 18,
+          "connect_archetype": 25
+        },
+        "outputs": {
+          "invoke_myth": 44,
+          "anchor_logo": 48,
+          "suggest_meaning": 53,
+          "represent_identity": 59
+        }
+      }
+    },
+    "resonance_map": {
+      "6": [
+        "S1-N2"
+      ],
+      "10": [
+        "S2-N0"
+      ],
+      "15": [
+        "S1-N3"
+      ],
+      "14": [
+        "S2-N1"
+      ],
+      "33": [
+        "S2-N2"
+      ],
+      "35": [
+        "S2-N3"
+      ],
+      "26": [
+        "S1-N1"
+      ],
+      "51": [
+        "Mixed"
+      ],
+      "\u221e": [
+        "Blueprint"
+      ]
+    }
+  },
+  "brand_palette": {
+    "primary": {
+      "name": "Primary",
+      "hex": "#006dbb",
+      "role": "primary",
+      "modality": "visual",
+      "resonance_outputs": [
+        26,
+        33
+      ],
+      "coherence_links": [
+        "S1-N1",
+        "S2-N2"
+      ],
+      "relationships": {
+        "accent": [
+          3,
+          5,
+          7,
+          11
+        ],
+        "fallback": [
+          13,
+          17,
+          19
+        ],
+        "inverse": [
+          3,
+          5,
+          11,
+          17
+        ]
+      },
+      "mutability_level": "protected",
+      "prime": 0.0
+    },
+    "primary-container": {
+      "name": "Primary Container",
+      "hex": "#e4f0fb",
+      "role": "primary-container",
+      "modality": "visual",
+      "resonance_outputs": [
+        26
+      ],
+      "coherence_links": [
+        "S1-N1"
+      ],
+      "relationships": {
+        "accent": [
+          2,
+          5,
+          7,
+          11,
+          13
+        ],
+        "fallback": [
+          17,
+          19,
+          23
+        ],
+        "inverse": [
+          2
+        ]
+      },
+      "mutability_level": "protected",
+      "prime": 0.000252
+    },
+    "secondary": {
+      "name": "Secondary",
+      "hex": "#3d5668",
+      "role": "secondary",
+      "modality": "symbolic",
+      "resonance_outputs": [
+        48
+      ],
+      "coherence_links": [
+        "S2-N0"
+      ],
+      "relationships": {
+        "accent": [
+          2,
+          3,
+          7,
+          11,
+          13
+        ],
+        "fallback": [
+          17,
+          19,
+          23
+        ],
+        "inverse": [
+          2
+        ]
+      },
+      "mutability_level": "protected",
+      "prime": 0.001008
+    },
+    "tertiary-1": {
+      "name": "Tertiary 1",
+      "hex": "#5c2d82",
+      "role": "tertiary-1",
+      "modality": "symbolic",
+      "resonance_outputs": [
+        44,
+        48
+      ],
+      "coherence_links": [
+        "S1-N3"
+      ],
+      "relationships": {
+        "accent": [
+          2,
+          3,
+          5,
+          11,
+          13,
+          17
+        ],
+        "fallback": [
+          19,
+          23
+        ],
+        "inverse": []
+      },
+      "mutability_level": "protected",
+      "prime": 0.002268
+    },
+    "tertiary-2": {
+      "name": "Tertiary 2",
+      "hex": "#008686",
+      "role": "tertiary-2",
+      "modality": "auditory",
+      "resonance_outputs": [
+        46
+      ],
+      "coherence_links": [
+        "S2-N1"
+      ],
+      "relationships": {
+        "accent": [
+          2,
+          3,
+          5,
+          7,
+          13,
+          17,
+          19
+        ],
+        "fallback": [
+          23
+        ],
+        "inverse": [
+          2
+        ]
+      },
+      "mutability_level": "protected",
+      "prime": 0.004031
+    },
+    "tertiary-3": {
+      "name": "Tertiary 3",
+      "hex": "#ad067a",
+      "role": "tertiary-3",
+      "modality": "linguistic",
+      "resonance_outputs": [
+        41,
+        43
+      ],
+      "coherence_links": [
+        "S2-N1",
+        "S2-N2"
+      ],
+      "relationships": {
+        "accent": [
+          3,
+          5,
+          7,
+          11,
+          17,
+          19,
+          23
+        ],
+        "fallback": [
+          2
+        ],
+        "inverse": []
+      },
+      "mutability_level": "protected",
+      "prime": 0.006299
+    },
+    "negative": {
+      "name": "Negative",
+      "hex": "#dd182c",
+      "role": "negative",
+      "modality": "emotional",
+      "resonance_outputs": [
+        52
+      ],
+      "coherence_links": [
+        "S1-N2"
+      ],
+      "relationships": {
+        "accent": [
+          7,
+          11,
+          13,
+          19,
+          23
+        ],
+        "fallback": [
+          2,
+          3,
+          5
+        ],
+        "inverse": [
+          2
+        ]
+      },
+      "mutability_level": "protected",
+      "prime": 0.00907
+    },
+    "warning": {
+      "name": "Warning",
+      "hex": "#ee610f",
+      "role": "warning",
+      "modality": "kinaesthetic",
+      "resonance_outputs": [
+        42
+      ],
+      "coherence_links": [
+        "S2-N0"
+      ],
+      "relationships": {
+        "accent": [
+          11,
+          13,
+          17,
+          23
+        ],
+        "fallback": [
+          2,
+          3,
+          5,
+          7
+        ],
+        "inverse": []
+      },
+      "mutability_level": "protected",
+      "prime": 0.012346
+    },
+    "positive": {
+      "name": "Positive",
+      "hex": "#00752a",
+      "role": "positive",
+      "modality": "emotional",
+      "resonance_outputs": [
+        50,
+        57
+      ],
+      "coherence_links": [
+        "S2-N3"
+      ],
+      "relationships": {
+        "accent": [
+          13,
+          17,
+          19
+        ],
+        "fallback": [
+          3,
+          5,
+          7,
+          11
+        ],
+        "inverse": []
+      },
+      "mutability_level": "adaptive",
+      "prime": 0.016125
+    }
+  },
+  "aliases": {
+    "color.text.link": "{brand_palette.primary.hex}",
+    "color.secondary.on-secondary": "{brand_palette.primary-container.hex}",
+    "color.feedback.warning.on-warning": "{brand_palette.primary-container.hex}",
+    "color.brand.tertiary-1.on-tertiary-1": "{brand_palette.primary-container.hex}",
+    "color.brand.tertiary-2.on-tertiary-2": "{brand_palette.primary-container.hex}",
+    "color.brand.tertiary-3.on-tertiary-3": "{brand_palette.primary-container.hex}",
+    "color.state.hover.surface.surface-1-hover": "{brand_palette.secondary.hex}",
+    "color.state.disabled.disabled-on-surface": "{brand_palette.negative.hex}",
+    "color.state.disabled.disabled-container": "{brand_palette.warning.hex}",
+    "radius.borderRadius": "{radius.sm}"
+  },
+  "mutability_policy": {
+    "protected": {
+      "prime_range": [
+        0.0,
+        0.0065
+      ],
+      "modification_allowed": false,
+      "notes": "Must remain stable across brand cycles. Anchors identity."
+    },
+    "adaptive": {
+      "prime_range": [
+        0.0065,
+        0.0125
+      ],
+      "modification_allowed": true,
+      "requires_audit": true
+    },
+    "flexible": {
+      "prime_range": [
+        0.0125,
+        1.0
+      ],
+      "modification_allowed": true,
+      "requires_audit": false
+    }
+  }
+}

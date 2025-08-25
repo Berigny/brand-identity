@@ -1,0 +1,23 @@
+model_list:
+  # Logical model name your app will call
+  - model_name: gpt-4o-mini
+    litellm_params:
+      # Primary (OpenRouter)
+      model: openai/gpt-4o-mini
+      api_base: https://openrouter.ai/api/v1
+      rpm: 60
+      tpm: 60000
+    routing:
+      strategy: fallback
+      providers:
+        - model: openai/gpt-4o-mini
+          api_base: https://openrouter.ai/api/v1
+        - model: meta-llama/Meta-Llama-3.1-70B-Instruct
+          api_base: https://openrouter.ai/api/v1
+        - model: ollama/llama3.1
+
+litellm_settings:
+  timeout: 60
+  max_output_tokens: 512
+  drop_params: false
+  stream: true

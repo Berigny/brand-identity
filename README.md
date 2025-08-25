@@ -14,3 +14,9 @@
 Notes
 - Microsoft 365/Copilot integration under `BrandID/` is optional and requires Microsoft login; ignore those `make ms365-*` targets for local use.
 - Some features (Agent tab) require LLM credentials. Set either Azure OpenAI variables (`AZURE_OPENAI_*`) or OpenRouter (`OPENROUTER_API_KEY`) in `.env.local`.
+
+## Core Concepts
+
+**Prime** denotes centrality/rigidity: **low prime (0)** = core/axiom, hard to change; **high prime (1)** = peripheral, easier to change.
+**Amendment threshold = base + k · (1 − prime).** Lower prime → higher evidence required.
+**System-1/System-2** operate across the graph: experiments begin at **high-prime** nodes and are promoted inward only when consilience is sufficient.

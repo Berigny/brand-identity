@@ -1,0 +1,16 @@
+services:
+  litellm:
+    build:
+      context: .
+      dockerfile: Dockerfile.litellm
+    platform: linux/amd64
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env.local
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+    volumes:
+      - ./litellm.yaml:/app/litellm.yaml
+    entrypoint: ["litellm"]
+    command: ["--port", "4000", "--config", "/app/litellm.yaml"]

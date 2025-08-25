@@ -2,6 +2,10 @@ from neo4j import GraphDatabase
 from dotenv import load_dotenv
 import os
 
+# Load environment from .env and .env.local (dev)
+load_dotenv()
+load_dotenv(".env.local")
+
 """
 One-shot Neo4j setup script to create constraints and seed base nodes.
 
@@ -38,8 +42,6 @@ SEEDS = [
 
 
 def run_setup():
-    load_dotenv()
-
     uri = os.getenv("NEO4J_URI")
     user = os.getenv("NEO4J_USER")
     password = os.getenv("NEO4J_PASSWORD")

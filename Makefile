@@ -5,12 +5,6 @@ PYTHON3 ?= python3
 PYTHON := $(VENV_DIR)/bin/python
 PIP := $(VENV_DIR)/bin/pip
 
-# --- Load environment variables from .env.local if present ---
-ifneq (,$(wildcard .env.local))
-  include .env.local
-  export
-endif
-
 PROMPT ?= Add a new tertiary emotional token with high prime, test for drift, and refine for consilience.
 
 .PHONY: install start agent stop restart check clean logs reset \
@@ -27,7 +21,10 @@ install: $(VENV_DIR)
 	@echo "Upgrading pip and installing requirements..."
 	$(PIP) install --upgrade pip
 	$(PIP) install -r requirements.txt
-	@echo "\nInstall complete. Ensure .env.local contains NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, NEO4J_DATABASE, and OpenRouter keys."
+	@echo "\nInstall complete. Ensure .env.local contains:"
+	@echo " - Neo4j: NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, NEO4J_DATABASE"
+	@echo " - Azure OpenAI: OPENAI_API_KEY, OPENAI_API_BASE, OPENAI_API_VERSION, OPENAI_DEPLOYMENT_NAME"
+	@echo " - (Optional) OpenRouter: OPENROUTER_API_KEY, OPENROUTER_BASE_URL, OPENROUTER_MODEL"
 
 PORT ?= 8000
 
@@ -109,7 +106,7 @@ ms365-openapi:
 	else \
 		sed -E -i "s|^[[:space:]]*-[[:space:]]url:.*|  - url: $(NGROK_URL)|" $$FILE; \
 	fi; \
-	echo "Updated OpenAPI servers[0].url -> $(NGROK_URL)"
+	@echo "Updated OpenAPI servers[0].url -> $(NGROK_URL)"
 
 # Provision the agent app via Teams Toolkit CLI
 ms365-provision:
@@ -171,6 +168,40 @@ help:
 	@printf "  %-28s %s\n" "atk-preview" "Upload and open preview"
 	@printf "  %-28s %s\n" "atk-install" "Install packaged app to Teams"
 	@printf "  %-28s %s\n" "atk-quickstart NGROK_URL=... API_KEY_REGISTRATION_ID=..." "Run scaffold→wire→preview"
+	@printf "  %-28s %s\n" "kernel-validate" "Validate brand_kernel.json primes vs policy"
+
+# Quick test of Azure OpenAI wiring
+.PHONY: test-azure
+test-azure: $(VENV_DIR)
+	$(PYTHON) test_azure.py
+
+# Quick test of OpenRouter wiring
+.PHONY: test-openrouter
+test-openrouter: $(VENV_DIR)
+	$(PYTHON) test_openai.py
+
+# Test LLM factory (proxy/local/openrouter auto)
+.PHONY: test-factory
+test-factory: $(VENV_DIR)
+	$(PYTHON) test_factory.py
+
+# Test reranker
+.PHONY: test-rerank
+test-rerank: $(VENV_DIR)
+	$(PYTHON) test_rerank.py
+
+# LiteLLM proxy helpers
+.PHONY: proxy-up proxy-down proxy-logs
+proxy-up:
+	docker compose up -d
+proxy-down:
+	docker compose down
+proxy-logs:
+	docker compose logs -f litellm
+
+.PHONY: kernel-validate
+kernel-validate: $(VENV_DIR)
+	$(PYTHON) scripts/validate_brand_kernel.py brand_kernel.json
 
 # ---- Microsoft 365 Agents Toolkit (atk) helpers ----
 
@@ -345,6 +376,6 @@ ms365-doctor:
 	if [ -n "$$URL" ]; then \
 		echo "- OpenAPI servers[0].url: $$URL"; \
 	else \
-		echo "- OpenAPI url: [UNKNOWN]"; \
+		echo "- OpenAPI url: [UNKNOWN]"
 	fi
 	@echo "- M365 account status:" && (cd BrandID && teamsapp account show m365 2>/dev/null || echo "  Not signed in")

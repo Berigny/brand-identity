@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import pandas as pd
 import random
+import os
 from collections import defaultdict
 
 # --- 1. IMAGE GENERATION SYSTEM ---
@@ -185,7 +186,18 @@ class RoutingController:
         self.ic_status = "up"
         self.max_local_steps = 5  # max processing steps a packet spends at a node before escalation
         # Alignment/consilience dynamics
-        self.high_prime_min = 11  # primes >= this considered higher-level
+        # Allow tuning the boundary for "higher primes" via env or by mapping kernel policy
+        try:
+            self.high_prime_min = int(os.getenv("FLOW_HIGH_PRIME_MIN")) if os.getenv("FLOW_HIGH_PRIME_MIN") else None
+        except Exception:
+            self.high_prime_min = None
+        if self.high_prime_min is None:
+            try:
+                from app.utils.prime_mapping import get_high_prime_min_from_kernel
+                self.high_prime_min = int(get_high_prime_min_from_kernel())
+            except Exception:
+                self.high_prime_min = 11
+        # primes >= this considered higher-level
         self.alignment_streak = 0
         self.streak_target = 3
         self.s1_threshold_offset = 0.0  # adaptive relaxation for S1 thresholds (max 0.05)

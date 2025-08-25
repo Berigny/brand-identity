@@ -5,6 +5,7 @@ langchain-neo4j
 langchain-community
 neo4j
 python-dotenv
+openai
 
 # API server
 fastapi
