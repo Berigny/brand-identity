@@ -80,7 +80,8 @@ def write_to_db(content: str) -> str:
             if float(sim.get("coherence_score", 0.0)) < min_coh:
                 return f"Blocked: coherence_score {sim.get('coherence_score')} below threshold {min_coh}."
 
-        if "brand_palette" in new_content:
+        write_count = 0
+        if isinstance(new_content.get("brand_palette"), dict) and new_content["brand_palette"]:
             for key, token in new_content["brand_palette"].items():
                 query = """
                 MERGE (t:BrandToken {key: $key})
@@ -101,6 +102,9 @@ def write_to_db(content: str) -> str:
                     "resonance_outputs": token.get("resonance_outputs", []),
                     "coherence_links": token.get("coherence_links", [])
                 })
+                write_count += 1
+        else:
+            return "No brand_palette provided or not a non-empty object; nothing written."
 
         # Optionally record a SimRun post-write
         try:
@@ -121,7 +125,9 @@ def write_to_db(content: str) -> str:
         except Exception:
             pass
 
-        return "Successfully wrote to DB."
+        if write_count == 0:
+            return "Parsed input but found no tokens to write."
+        return f"Successfully wrote {write_count} token(s) to DB."
     except Exception as e:
         return f"Error: {str(e)}"
 
@@ -269,8 +275,8 @@ def _parse_json_like(payload: str):
     s = str(payload).strip()
     if not s:
         return {}
-    # If input is quoted with single quotes, strip them
-    if s.startswith("'") and s.endswith("'"):
+    # If input is wrapped in quotes or backticks, strip outer pair
+    if (s.startswith("'") and s.endswith("'")) or (s.startswith("`") and s.endswith("`")):
         s = s[1:-1]
     s = re.sub(r"^\s*json\s*", "", s, flags=re.IGNORECASE)
     if s.startswith("```"):
